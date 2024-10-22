@@ -1,12 +1,11 @@
 import motor.motor_asyncio
 
-MONGO_DETAILS = "mongodb://localhost:27017"
+def db_config():
+    MONGO_DETAILS = "mongodb://localhost:27017"
+    client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+    database = client.allocationDB
+    allocation_history = database.get_collection("allocation_history")
 
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
-
-database = client.allocationDB
-
-allocation_history = database.get_collection("allocation_history")
 
 async def create_indexes():
     # Creating an index on vehicle_id and allocation_date to searching faster
