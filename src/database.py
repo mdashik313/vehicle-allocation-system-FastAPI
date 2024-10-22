@@ -12,11 +12,11 @@ async def create_indexes():
     # Creating an index on vehicle_id and allocation_date to searching faster
     await allocation_history.create_index([("vehicle_id", 1), ("allocation_date", 1)], name="vehicle_allocation_index")
 
-def allocationDB_helper(allocationDB) -> dict:
+def allocationDB_helper(allocation) -> dict:
     return {
-        "allocation_id": str(allocation_history["_id"]),
-        "employee_id": allocation_history["employee_id"],
-        "employee_name": allocation_history["employee_name"],
-        "vehicle_id": allocation_history["vehicle_id"],
-        "allocation_date": allocation_history["allocation_date"].strftime("%Y-%m-%d")
+        "allocation_id": str(allocation["_id"]),
+        "employee_id": allocation["employee_id"],
+        "employee_name": allocation["employee_name"],
+        "vehicle_id": allocation["vehicle_id"],
+        "allocation_date": allocation["allocation_date"].strftime("%Y-%m-%d")
     }

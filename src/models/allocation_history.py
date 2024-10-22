@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 
-class AllocationHistory(BaseModel):
+class AllocationSchema(BaseModel):
     employee_id: str = Field(..., gt=0, lt=1001)
     employee_name: str = Field(...)
     vehicle_id : str = Field(..., gt=0, lt=1001)
@@ -18,4 +18,10 @@ class AllocationHistory(BaseModel):
         }
 
 
+def ResponseModel(data, message):
+    return {
+        "data": [data],
+        "code": 200,
+        "message": message,
+    }
 
