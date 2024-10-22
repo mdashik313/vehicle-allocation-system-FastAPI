@@ -8,6 +8,9 @@ database = client.allocationDB
 
 allocation_history = database.get_collection("allocation_history")
 
+async def create_indexes():
+    # Creating an index on vehicle_id and allocation_date to searching faster
+    await allocation_history.create_index([("vehicle_id", 1), ("allocation_date", 1)], name="vehicle_allocation_index")
 
 def allocationDB_helper(allocationDB) -> dict:
     return {
