@@ -14,8 +14,8 @@ router = APIRouter(prefix="/allocation",
 @router.get("/", response_description="Allocation history received")
 async def get_allocations():
     allocations = await retrieve_allocations()
-    if students:
-        return ResponseModel(students, "Students data retrieved successfully")
+    if allocations:
+        return ResponseModel(allocations, "Allocations data retrieved successfully")
     return ResponseModel(students, "Empty list returned")
 
 
