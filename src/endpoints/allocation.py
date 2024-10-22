@@ -1,22 +1,16 @@
 from fastapi import APIRouter, Body, status
 from fastapi.encoders import jsonable_encoder
-from src.crud.allocation import retrieve_allocations, create_allocation
+from src.crud.allocation import *
 from src.models.allocation_history import AllocationSchema, ResponseModel
 from src.database import allocation_history
 from datetime import date, datetime
+from bson.objectid import ObjectId
+
 
 
 router = APIRouter(prefix="/allocation",
     tags=["Vehicle Allocation System"])
 
-
-#api endpoint to vide all allocations
-@router.get("/", response_description="Allocation history received")
-async def get_allocations():
-    allocations = await retrieve_allocations()
-    if allocations:
-        return ResponseModel(allocations, "Allocations data retrieved successfully")
-    return ResponseModel(students, "Empty list returned")
 
 
 #api endpoint to add new allocation
@@ -41,6 +35,27 @@ async def add_allocation(allocation: AllocationSchema = Body(...)):
     return ResponseModel(new_allocation, "Allocation done successfully.")
 
 
+
+#api endpoint to view all allocations
+@router.get("/", response_description="Allocation history received")
+async def get_allocations():
+    allocations = await retrieve_allocations()
+    if allocations:
+        return ResponseModel(allocations, "Allocations data retrieved successfully")
+    return ResponseModel(students, "Empty list returned")
+
+
+#api to delete an allocation
+@router.delete("/{allocation_id}", response_description="Allocation data deleted from the database")
+async def delete_allocation_data(allocation_id: str):
+    deleted_allocation = await delete_allocation(allocation_id)
+    if deleted_allocation:
+        return ResponseModel(
+            "Allocation with ID: {} removed".format(allocation_id), "Successfully Deleted"
+        )
+    return ResponseModel(
+        "An error occurred", "Allocation with id {} doesn't exist".format(allocation_id)
+    )
 
 
 
