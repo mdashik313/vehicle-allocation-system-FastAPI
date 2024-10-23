@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, status, HTTPException
 from fastapi.encoders import jsonable_encoder
 from src.crud.allocation import *
-from src.models.allocation import AllocationSchema, ResponseModel, UpdateAllocation
+from src.models.allocation import AllocationSchema, ResponseModel, UpdateAllocation, FilterAllocations
 from src.database import allocation_history
 from datetime import date, datetime
 from bson.objectid import ObjectId
@@ -76,7 +76,18 @@ async def update_allocation_data(allocation : UpdateAllocation = Body(...)):
     return ResponseModel(updated_allocation,message)
 
 
+#api for filtering allocations based on different attributes
+@router.post("/search", response_description="Search allocations")
+async def search_allocations_endpoint(search_params: FilterAllocations = Body(...)):
+    search_params = jsonable_encoder(search_params)
 
+    result = await search_allocations(search_params)
+
+    if result:
+        return ResponseModel(result, "{} result(s) found.".format(len(result)))
+    
+    return ResponseModel(result, "No result found.")
+    
 
 
 

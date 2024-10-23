@@ -71,6 +71,24 @@ class UpdateAllocation(BaseModel):
 
 
 
+class FilterAllocations(BaseModel):
+    allocation_id: Optional[str]
+    employee_id: Optional[int]
+    vehicle_id: Optional[int]
+    allocation_date: Optional[str]
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "allocation_id": "yourAllocationID",
+                "employee_id": 1,
+                "vehicle_id": 1,
+                "allocation_date": "2024-10-22"
+            }
+        }
+    
+
+
 def ResponseModel(data, message):
     return {
         "data": [data],

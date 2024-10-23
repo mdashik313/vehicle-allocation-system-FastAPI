@@ -1,6 +1,8 @@
 from src.database import allocation_history, allocationDB_helper
 from bson.objectid import ObjectId
 from datetime import date, datetime
+from motor.motor_asyncio import AsyncIOMotorCollection
+from src.models.allocation import FilterAllocations
 
 
 #crud operations
@@ -59,3 +61,29 @@ async def update_allocation(allocation_data: dict) -> tuple:
         return allocation_data, "Allocation ID not found."
         
 
+# Search allocations
+async def search_allocations(search_params: dict) -> list:
+    query = {}
+
+    # Check if allocation_id is provided and valid
+    if search_params.get("allocation_id"):
+        if ObjectId.is_valid(search_params["allocation_id"]):
+            query["_id"] = ObjectId(search_params["allocation_id"])
+        else:
+            return []  # Return an empty list for an invalid ObjectId format
+
+    # Check if allocation_date is provided
+    if search_params.get("allocation_date"):
+        query["allocation_date"] = search_params["allocation_date"]
+
+    # Check if vehicle_id is provided
+    if search_params.get("vehicle_id"):
+        query["vehicle_id"] = search_params["vehicle_id"]
+
+    # Check if employee_id is provided
+    if search_params.get("employee_id"):
+        query["employee_id"] = search_params["employee_id"]
+
+    # Fetch all matching documents from the collection
+    results = await allocation_history.find(query).to_list(length=None)
+    return results
