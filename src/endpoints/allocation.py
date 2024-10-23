@@ -92,9 +92,10 @@ async def search_by_allocations_id(search_params: FilterByAllocationID = Body(..
 #api for filtering by other attributes
 @router.post("/search", response_description="Search allocations")
 async def search_by_others(search_params: FilterByOthers = Body(...)):
-    search_params_ = jsonable_encoder(search_params)
+    search_params = {k: v for k, v in search_params.dict().items() if v is not None}
+    # search_params_ = jsonable_encoder(search_params)
    # return search_params
-    result = await search_allocations(search_params_)
+    result = await search_allocations(search_params)
 
     if result:
         return ResponseModel(result, "Result(s) found.")
