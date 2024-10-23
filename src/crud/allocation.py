@@ -61,32 +61,16 @@ async def update_allocation(allocation_data: dict) -> tuple:
         
 
 # Search allocations
-async def search_allocations(search_params: dict) -> list:
-    query = {}
-    
+async def filter_allocation(search_params: dict) -> list:
+
     # Check if allocation_id is provided
     if search_params.get("allocation_id"):
-        results = await allocation_history.find_one({"_id": ObjectId(search_params["allocation_id"])})
-        if results:
-            return allocationDB_helper(results)
-        else:
-            return [] 
-    
-    # # Check if allocation_date is provided
-    # if search_params.get("allocation_date"):
-    #     query["allocation_date"] = search_params["allocation_date"]
-
-    # # Check if vehicle_id is provided
-    # if search_params.get("vehicle_id"):
-    #     query["vehicle_id"] = search_params["vehicle_id"]
-
-    # # Check if employee_id is provided
-    # if search_params.get("employee_id"):
-    #     query["employee_id"] = search_params["employee_id"]
-
-    # # Fetch all matching documents from the collection
-    # # results = await allocation_history.find(query).to_list(length=None)
-
+        if ObjectId.is_valid(search_params.get("allocation_id")):
+            results = await allocation_history.find_one({"_id": ObjectId(search_params["allocation_id"])})
+            if results:
+                return allocationDB_helper(results)
+            else:
+                return [] 
         
     results = allocation_history.find({
         "$and": [
@@ -98,8 +82,4 @@ async def search_allocations(search_params: dict) -> list:
     async for allocation in results:
         allocation_list.append(allocationDB_helper(allocation))
 
-    return allocation_list
-    # Fetch all matching documents from the collection
-    
-
-    
+    return allocation_list    

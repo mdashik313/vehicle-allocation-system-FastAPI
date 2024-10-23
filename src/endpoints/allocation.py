@@ -76,26 +76,26 @@ async def update_allocation_data(allocation : UpdateAllocation = Body(...)):
     return ResponseModel(updated_allocation,message)
 
 
-#api for filtering by allocation id
-@router.post("/search-by-allocation-id", response_description="Search allocations")
-async def search_by_allocations_id(search_params: FilterByAllocationID = Body(...)):
-    search_params_ = jsonable_encoder(search_params)
+# #api for filtering by allocation id
+# @router.post("/search-by-allocation-id", response_description="Search allocations")
+# async def search_by_allocations_id(search_params: FilterByAllocationID = Body(...)):
+#     search_params_ = jsonable_encoder(search_params)
 
-    result = await search_allocations(search_params_)
+#     result = await search_allocations(search_params_)
 
-    if result:
-        return ResponseModel(result, "Result(s) found.")
+#     if result:
+#         return ResponseModel(result, "Result(s) found.")
     
-    return ResponseModel(result, "No result found.")
+#     return ResponseModel(result, "No result found.")
     
 
 #api for filtering by other attributes
 @router.post("/search", response_description="Search allocations")
-async def search_by_others(search_params: FilterByOthers = Body(...)):
+async def search_allocation(search_params: SearchFilterSchema = Body(...)):
+
     search_params = {k: v for k, v in search_params.dict().items() if v is not None}
-    # search_params_ = jsonable_encoder(search_params)
-   # return search_params
-    result = await search_allocations(search_params)
+    
+    result = await filter_allocation(search_params)
 
     if result:
         return ResponseModel(result, "Result(s) found.")
