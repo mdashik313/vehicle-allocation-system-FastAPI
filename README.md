@@ -37,19 +37,41 @@ uvicorn main:app --reload
 The message "Database configured and application running successfull" will appear if everything is right.
 
 ## Deployment
-<mark> MongoDB Atlas </mark> </br>
-I will use MongoDB Atlas, a cloud database service for MongoDB to host the database. </br>
+### MongoDB Atlas
+I will use <mark> MongoDB Atlas </mark>, a cloud database service for MongoDB to host the database. </br>
 Steps to setup MongoDB Atlas in the project:
 1. Register for Atlas account, deploy a free tier cluster, set up a user, and an IP address.
 2. Grab the database connection URL from the cluster.
 3. In the src/database.py file in porject directory set MONGO_DETAILS = "connection_URL"
 4. Restart Uvicorn server and test each route from the interactive documentation at http://localhost:8000/docs
 
-For deploying the application, I will use <mark> Heroku </mark> as the hosting platform and <mark> MongoDB Atlas </mark> for the database service.
+### Heroku
+For deploying the application, I will use <mark> Heroku </mark> as the hosting platform.
+Steps to setup MongoDB Atlas in the project:
+1. Sign up for a Heroku account and install the Heroku CLI.
+2. Add a Procfile to project's root
+```
+web: uvicorn app.server.app:app --host 0.0.0.0 --port=$PORT
+```
+3. Initialize a git repository in project root if not initialized yet
+```
+git init
+git add .
+git commit -m "Initialization"
+```
+4. Create a new app on Heroku:
+```
+heroku create
+```
+5. Push code to Heroku and check an instance of the application is running
+```
+git push heroku master
+heroku ps:scale web=1
+```
+6. Run on broweser
+```
+heroku open
+```
 
-Heroku provides a seamless and scalable environment for deploying applications with built-in support for integration and easy scaling.
-
-MongoDB Atlas, a cloud database service, offers global distribution, ensuring high availability and scalability along with its monitoring and automated backups features.
-
-
-##
+## Maintainance
+To maintain the project effectively, I will use Git and GitHub for version control, ensuring a clear history of changes, with feature branches and pull requests for collaboration and review. Testing will be prioritized through unit and integration tests with tools like pytest to maintain high code quality. For database performance, regular backups and index optimization will be implemented. The application will be containerized with Docker and managed via Kubernetes for scalability. Additionally, clear code documentation, a detailed README, and Swagger-based API docs will ensure easy understanding and extension of the project.
