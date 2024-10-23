@@ -49,7 +49,7 @@ Steps to setup MongoDB Atlas in the project:
 For deploying the application, I will use <mark> Heroku </mark> as the hosting platform.
 Steps to setup Heroku in the project:
 1. Sign up for a Heroku account and install the Heroku CLI.
-2. Add a Procfile to project's root
+2. Add a file named Procfile to project's root directory and paste the following line
 ```
 web: uvicorn app.server.app:app --host 0.0.0.0 --port=$PORT
 ```
