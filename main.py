@@ -13,9 +13,6 @@ async def startup_event():
     except Exception as e:
         print(f"Error during startup: {e}")
 
-# @app.get("/", tags=["Root"])
-# async def read_root():
-#     return {"message": "Welcome to this fantastic app!"}
 
 app.include_router(api_router)
 
