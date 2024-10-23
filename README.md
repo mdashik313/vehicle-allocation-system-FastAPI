@@ -37,11 +37,14 @@ uvicorn main:app --reload
 The message "Database configured and application running successfull" will appear if everything is right.
 
 ## Deployment
-
+<mark> MongoDB Atlas </mark> </br>
 I will use MongoDB Atlas, a cloud database service for MongoDB to host the database. </br>
 Steps to setup MongoDB Atlas in the project:
 1. Register for Atlas account, deploy a free tier cluster, set up a user, and an IP address.
-2. 
+2. Grab the database connection URL from the cluster.
+3. In the src/database.py file in porject directory set MONGO_DETAILS = "connection_URL"
+4. Restart Uvicorn server and test each route from the interactive documentation at http://localhost:8000/docs
+
 For deploying the application, I will use <mark> Heroku </mark> as the hosting platform and <mark> MongoDB Atlas </mark> for the database service.
 
 Heroku provides a seamless and scalable environment for deploying applications with built-in support for integration and easy scaling.
