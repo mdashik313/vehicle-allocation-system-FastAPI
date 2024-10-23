@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 
 
 
-class AllocationSchema(BaseModel):
+class AllocationSchema(BaseModel):  #model to mapping the database
     employee_id: int = Field(..., gt=0, lt=1001)
     employee_name: str = Field(...)
     vehicle_id: int = Field(..., gt=0, lt=1001)
@@ -13,11 +13,10 @@ class AllocationSchema(BaseModel):
 
     @validator("allocation_date")
     def check_allocation_date(cls, value):
-        # Convert the string to a date object
-        allocation_date_obj = datetime.strptime(value, "%Y-%m-%d").date()
+        
+        allocation_date_obj = datetime.strptime(value, "%Y-%m-%d").date() # Convert the string to a date object
 
-        # Compare the allocation date with today's date
-        if allocation_date_obj < date.today():
+        if allocation_date_obj < date.today():  # Compare the allocation date with today's date
             raise ValueError("Allocation date must be greater than or equal to today's date.")
         
         # If validation passes, return the original value
@@ -34,7 +33,7 @@ class AllocationSchema(BaseModel):
         }
 
 
-class UpdateAllocation(BaseModel):
+class UpdateAllocation(BaseModel):  #model for updating allocation
     allocation_id: str = Field(...)
     vehicle_id: int = Field(..., gt=0, lt=1001)
     allocation_date: str = Field(...) 
@@ -48,11 +47,10 @@ class UpdateAllocation(BaseModel):
 
     @validator("allocation_date")
     def check_allocation_date(cls, value):
-        # Convert the string to a date object
-        allocation_date_obj = datetime.strptime(value, "%Y-%m-%d").date()
+        
+        allocation_date_obj = datetime.strptime(value, "%Y-%m-%d").date() # Convert the string to a date object
 
-        # Check whether the allocation date is set for futere
-        if allocation_date_obj <= date.today():
+        if allocation_date_obj <= date.today():  # Check whether the allocation date is set for futere
             raise ValueError("Can not update, because allocation date is passed..")
         
         # If validation passes, return the original value
@@ -70,7 +68,7 @@ class UpdateAllocation(BaseModel):
         }
 
 
-class SearchFilterSchema(BaseModel):
+class SearchFilterSchema(BaseModel):   #model for search/filter
     allocation_id: Optional[str]
     employee_id: Optional[int] 
     vehicle_id: Optional[int] 
@@ -87,7 +85,7 @@ class SearchFilterSchema(BaseModel):
         }
 
 
-def ResponseModel(data, message):
+def ResponseModel(data, message):  #custom response model
     return {
         "data": [data],
         "message": message,

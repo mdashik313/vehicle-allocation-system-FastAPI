@@ -15,7 +15,7 @@ router = APIRouter(prefix="/allocation",
 
 #api endpoint to create new allocation
 @router.post("/", response_description="Create a new allocation")
-async def create_allocation(allocation: AllocationSchema = Body(...)):
+async def create_allocation(allocation: AllocationSchema = Body(...)):  
 
     
     # Check if the vehicle is already allocated for the given date
@@ -24,7 +24,7 @@ async def create_allocation(allocation: AllocationSchema = Body(...)):
         "allocation_date": allocation.allocation_date
     })
     
-    allocation = jsonable_encoder(allocation)
+    allocation = jsonable_encoder(allocation)   #converting pydentic models to JSON Compatible datatype
 
     if existing_allocation:
         return ResponseModel(allocation, "Vehicle is already allocated for this date.")
@@ -80,7 +80,7 @@ async def update_allocation(allocation : UpdateAllocation = Body(...)):
 @router.post("/search", response_description="Search allocations")
 async def history_report_filter(search_params: SearchFilterSchema = Body(...)):
 
-    search_params = {k: v for k, v in search_params.dict().items() if v is not None}
+    search_params = {k: v for k, v in search_params.dict().items() if v is not None}   #taking only those attributes that is not null
 
     result = await filter_allocation(search_params)
 
