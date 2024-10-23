@@ -78,7 +78,7 @@ async def update_allocation(allocation : UpdateAllocation = Body(...)):
 
 #api for filtering allocations
 @router.post("/search", response_description="Search allocations")
-async def search_allocation(search_params: SearchFilterSchema = Body(...)):
+async def history_report_filter(search_params: SearchFilterSchema = Body(...)):
 
     search_params = {k: v for k, v in search_params.dict().items() if v is not None}
 
