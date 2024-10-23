@@ -25,11 +25,37 @@ async def delete_allocation(id : str):
     
     if allocation:
         allocation_date_str = datetime.strptime(allocation["allocation_date"], "%Y-%m-%d").date()
-        if allocation_date_str >= date.today():
+        if allocation_date_str <= date.today():
             return 0  # let 0 means date it is not future date
         else: 
             await allocation_history.delete_one({"_id": ObjectId(id)})
             return 1  # let 1 means successfully deleted
     return 2  #let 2 means date doesn't exist
 
+
+
+#Update allocation
+async def update_allocation(allocation_data: dict) -> tuple:
+    
+    # Check if the vehicle is already allocated for the given date
+    existing_allocation = await allocation_history.find_one({
+        "vehicle_id": allocation_data["vehicle_id"],
+        "allocation_date": allocation_data["allocation_date"]
+    })
+
+    if existing_allocation:
+        return allocation_data, "Vehicle is already allocated for this date."
+
+    updated_allocation = await allocation_history.update_one(
+        {"_id": ObjectId(allocation_data["allocation_id"])}, {"$set": {
+            "vehicle_id" : allocation_data["vehicle_id"],
+            "allocation_date" : allocation_data["allocation_date"]
+        }}
+    )
+
+    if updated_allocation.modified_count:
+        return allocation_data, "Allocation updated successfully."
+    else:
+        return allocation_data, "Allocation ID not found."
+        
 

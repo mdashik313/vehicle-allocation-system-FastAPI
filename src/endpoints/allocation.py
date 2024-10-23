@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Body, status
+from fastapi import APIRouter, Body, status, HTTPException
 from fastapi.encoders import jsonable_encoder
 from src.crud.allocation import *
-from src.models.allocation import AllocationSchema, ResponseModel
+from src.models.allocation import AllocationSchema, ResponseModel, UpdateAllocation
 from src.database import allocation_history
 from datetime import date, datetime
 from bson.objectid import ObjectId
@@ -17,8 +17,6 @@ router = APIRouter(prefix="/allocation",
 @router.post("/", response_description="Create a new allocation")
 async def create_allocation(allocation: AllocationSchema = Body(...)):
 
-     # Convert allocation_date (date object) to a datetime object(mongo supported)
-    #allocation_datetime = datetime.combine(allocation.allocation_date, datetime.min.time())
     
     # Check if the vehicle is already allocated for the given date
     existing_allocation = await allocation_history.find_one({
@@ -44,17 +42,26 @@ async def get_allocations():
     return ResponseModel(allocations, "Empty list returned")
 
 
+
 #api to delete an allocation
 @router.delete("/{allocation_id}", response_description="Allocation data deleted from the database.")
 async def delete_allocation_data(allocation_id: str):
+    # Cehcking that the allocation_id is a valid ObjectId
+    if not ObjectId.is_valid(allocation_id):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid allocation ID format. Must be a 24-character hex string."
+        )
+
     deleted_allocation = await delete_allocation(allocation_id)
+
     if deleted_allocation == 1:
         return ResponseModel(
             "Allocation with ID: {} removed".format(allocation_id), "Successfully Deleted"
         )
     elif deleted_allocation == 0:
         return ResponseModel(
-            "Can not delete", "Date is not a future date."
+            "Deleting can't be processed", "Date is not a future date."
         )
     elif deleted_allocation == 2:
         return ResponseModel(
@@ -62,7 +69,13 @@ async def delete_allocation_data(allocation_id: str):
             )
 
 #api to update an allocation
-# @router.put("/{allocation_id}", response_description="Allocation data updated.")
+@router.put("/", response_description="Allocation data updated.")
+async def update_allocation_data(allocation : UpdateAllocation = Body(...)):
+    allocation = jsonable_encoder(allocation)
+    updated_allocation, message = await update_allocation(allocation)
+    return ResponseModel(updated_allocation,message)
+
+
 
 
 
