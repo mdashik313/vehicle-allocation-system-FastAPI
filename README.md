@@ -34,3 +34,4 @@ pip install -r requirements.txt
 ```
 uvicorn main:app --reload
 ```
+The message "Database configured and application running successfull" will appear if everything is right.
