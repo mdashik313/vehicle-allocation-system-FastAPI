@@ -41,21 +41,28 @@ async def get_allocations():
     allocations = await retrieve_allocations()
     if allocations:
         return ResponseModel(allocations, "Allocations data retrieved successfully")
-    return ResponseModel(students, "Empty list returned")
+    return ResponseModel(allocations, "Empty list returned")
 
-    
+
 #api to delete an allocation
-@router.delete("/{allocation_id}", response_description="Allocation data deleted from the database")
+@router.delete("/{allocation_id}", response_description="Allocation data deleted from the database.")
 async def delete_allocation_data(allocation_id: str):
     deleted_allocation = await delete_allocation(allocation_id)
-    if deleted_allocation:
+    if deleted_allocation == 1:
         return ResponseModel(
             "Allocation with ID: {} removed".format(allocation_id), "Successfully Deleted"
         )
-    return ResponseModel(
-        "An error occurred", "Allocation with id {} doesn't exist".format(allocation_id)
-    )
+    elif deleted_allocation == 0:
+        return ResponseModel(
+            "Can not delete", "Date is not a future date."
+        )
+    elif deleted_allocation == 2:
+        return ResponseModel(
+                "An error occured", "Allocation with id {} doesn't exist".format(allocation_id)
+            )
 
+#api to update an allocation
+# @router.put("/{allocation_id}", response_description="Allocation data updated.")
 
 
 
