@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, status
 from fastapi.encoders import jsonable_encoder
 from src.crud.allocation import *
-from src.models.allocation_history import AllocationSchema, ResponseModel
+from src.models.allocation import AllocationSchema, ResponseModel
 from src.database import allocation_history
 from datetime import date, datetime
 from bson.objectid import ObjectId
@@ -13,9 +13,9 @@ router = APIRouter(prefix="/allocation",
 
 
 
-#api endpoint to add new allocation
+#api endpoint to create new allocation
 @router.post("/", response_description="Create a new allocation")
-async def add_allocation(allocation: AllocationSchema = Body(...)):
+async def create_allocation(allocation: AllocationSchema = Body(...)):
 
      # Convert allocation_date (date object) to a datetime object(mongo supported)
     #allocation_datetime = datetime.combine(allocation.allocation_date, datetime.min.time())
@@ -31,9 +31,8 @@ async def add_allocation(allocation: AllocationSchema = Body(...)):
     if existing_allocation:
         return ResponseModel(allocation, "Vehicle is already allocated for this date.")
 
-    new_allocation = await create_allocation(allocation)
+    new_allocation = await add_allocation(allocation)
     return ResponseModel(new_allocation, "Allocation done successfully.")
-
 
 
 #api endpoint to view all allocations
@@ -44,7 +43,7 @@ async def get_allocations():
         return ResponseModel(allocations, "Allocations data retrieved successfully")
     return ResponseModel(students, "Empty list returned")
 
-
+    
 #api to delete an allocation
 @router.delete("/{allocation_id}", response_description="Allocation data deleted from the database")
 async def delete_allocation_data(allocation_id: str):
@@ -56,6 +55,13 @@ async def delete_allocation_data(allocation_id: str):
     return ResponseModel(
         "An error occurred", "Allocation with id {} doesn't exist".format(allocation_id)
     )
+
+
+
+
+
+
+
 
 
 
