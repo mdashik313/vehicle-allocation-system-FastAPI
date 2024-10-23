@@ -35,3 +35,14 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 The message "Database configured and application running successfull" will appear if everything is right.
+
+## Deployment
+
+For deploying the application, I will use <mark> Heroku </mark> as the hosting platform and <mark> MongoDB Atlas </mark> for the database service.
+
+Heroku provides a seamless and scalable environment for deploying applications with built-in support for integration and easy scaling.
+
+MongoDB Atlas, a cloud database service, offers global distribution, ensuring high availability and scalability along with its monitoring and automated backups features.
+
+
+##
