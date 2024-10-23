@@ -2,7 +2,6 @@ from src.database import allocation_history, allocationDB_helper
 from bson.objectid import ObjectId
 from datetime import date, datetime
 from motor.motor_asyncio import AsyncIOMotorCollection
-from src.models.allocation import FilterAllocations
 
 
 #crud operations
@@ -65,25 +64,39 @@ async def update_allocation(allocation_data: dict) -> tuple:
 async def search_allocations(search_params: dict) -> list:
     query = {}
 
-    # Check if allocation_id is provided and valid
+    # Check if allocation_id is provided
     if search_params.get("allocation_id"):
-        if ObjectId.is_valid(search_params["allocation_id"]):
-            query["_id"] = ObjectId(search_params["allocation_id"])
+        results = await allocation_history.find_one({"_id": ObjectId(search_params["allocation_id"])})
+        if results:
+            return allocationDB_helper(results)
         else:
-            return []  # Return an empty list for an invalid ObjectId format
-
+            return [] 
+    
     # Check if allocation_date is provided
-    if search_params.get("allocation_date"):
+    if search_params.get("allocation_date") is not None:
         query["allocation_date"] = search_params["allocation_date"]
 
     # Check if vehicle_id is provided
-    if search_params.get("vehicle_id"):
+    if search_params.get("vehicle_id") is not None:
         query["vehicle_id"] = search_params["vehicle_id"]
 
     # Check if employee_id is provided
-    if search_params.get("employee_id"):
+    if search_params.get("employee_id") is not None:
         query["employee_id"] = search_params["employee_id"]
 
     # Fetch all matching documents from the collection
-    results = await allocation_history.find(query).to_list(length=None)
-    return results
+    # results = await allocation_history.find(query).to_list(length=None)
+
+        
+    results = allocation_history.find(query)
+    
+    allocation_list = []
+    # Iterating over the result to retrieve documents
+    async for allocation in results:
+        allocation_list.append(allocationDB_helper(allocation))
+
+    return allocation_list
+    # Fetch all matching documents from the collection
+    
+
+    

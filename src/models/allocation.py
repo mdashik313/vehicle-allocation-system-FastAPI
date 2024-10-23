@@ -71,22 +71,36 @@ class UpdateAllocation(BaseModel):
 
 
 
-class FilterAllocations(BaseModel):
-    allocation_id: Optional[str]
-    employee_id: Optional[int]
-    vehicle_id: Optional[int]
-    allocation_date: Optional[str]
+class FilterByAllocationID(BaseModel):
+    allocation_id: Optional[str] = Field(None)
+
+    @validator("allocation_id")
+    def validate_object_id(cls, value):
+        # Validate that allocation_id is a valid ObjectId
+        if not ObjectId.is_valid(value):
+            raise ValueError("Invalid allocation ID format. Must be a 24-character hex string.")
+        return value
 
     class Config:
         json_schema_extra = {
             "example": {
-                "allocation_id": "yourAllocationID",
+                "allocation_id": "yourAllocationID"
+            }
+        }
+
+class FilterByOthers(BaseModel):
+    employee_id: Optional[int] 
+    vehicle_id: Optional[int] 
+    allocation_date: Optional[str] 
+
+    class Config:
+        json_schema_extra = {
+            "example": {
                 "employee_id": 1,
                 "vehicle_id": 1,
                 "allocation_date": "2024-10-22"
             }
         }
-    
 
 
 def ResponseModel(data, message):
