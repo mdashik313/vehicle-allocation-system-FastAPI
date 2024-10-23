@@ -21,7 +21,7 @@ async def add_allocation(allocation_data: dict) -> dict:
 
 
 #Delete an allocation
-async def delete_allocation(id : str):
+async def delete_allocation_data(id : str):
     allocation = await allocation_history.find_one({"_id": ObjectId(id)})
     
     if allocation:
@@ -36,7 +36,7 @@ async def delete_allocation(id : str):
 
 
 #Update allocation
-async def update_allocation(allocation_data: dict) -> tuple:
+async def update_allocation_data(allocation_data: dict) -> tuple:
     
     # Check if the vehicle is already allocated for the given date
     existing_allocation = await allocation_history.find_one({

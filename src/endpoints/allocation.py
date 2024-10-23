@@ -35,7 +35,7 @@ async def create_allocation(allocation: AllocationSchema = Body(...)):
 
 #api endpoint to view all allocations
 @router.get("/", response_description="Allocation history received")
-async def get_allocations():
+async def view_all_allocations():
     allocations = await retrieve_allocations()
     if allocations:
         return ResponseModel(allocations, "Allocations data retrieved successfully")
@@ -45,7 +45,7 @@ async def get_allocations():
 
 #api to delete an allocation
 @router.delete("/{allocation_id}", response_description="Allocation data deleted from the database.")
-async def delete_allocation_data(allocation_id: str):
+async def delete_allocation(allocation_id: str):
     # Cehcking that the allocation_id is a valid ObjectId
     if not ObjectId.is_valid(allocation_id):
         raise HTTPException(
@@ -53,7 +53,7 @@ async def delete_allocation_data(allocation_id: str):
             detail="Invalid allocation ID format. Must be a 24-character hex string."
         )
 
-    deleted_allocation = await delete_allocation(allocation_id)
+    deleted_allocation = await delete_allocation_data(allocation_id)
 
     if deleted_allocation == 1:
         return ResponseModel(
@@ -70,31 +70,18 @@ async def delete_allocation_data(allocation_id: str):
 
 #api to update an allocation
 @router.put("/", response_description="Allocation data updated.")
-async def update_allocation_data(allocation : UpdateAllocation = Body(...)):
+async def update_allocation(allocation : UpdateAllocation = Body(...)):
     allocation = jsonable_encoder(allocation)
-    updated_allocation, message = await update_allocation(allocation)
+    updated_allocation, message = await update_allocation_data(allocation)
     return ResponseModel(updated_allocation,message)
-
-
-# #api for filtering by allocation id
-# @router.post("/search-by-allocation-id", response_description="Search allocations")
-# async def search_by_allocations_id(search_params: FilterByAllocationID = Body(...)):
-#     search_params_ = jsonable_encoder(search_params)
-
-#     result = await search_allocations(search_params_)
-
-#     if result:
-#         return ResponseModel(result, "Result(s) found.")
-    
-#     return ResponseModel(result, "No result found.")
     
 
-#api for filtering by other attributes
+#api for filtering allocations
 @router.post("/search", response_description="Search allocations")
 async def search_allocation(search_params: SearchFilterSchema = Body(...)):
 
     search_params = {k: v for k, v in search_params.dict().items() if v is not None}
-    
+
     result = await filter_allocation(search_params)
 
     if result:
