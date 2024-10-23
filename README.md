@@ -38,6 +38,10 @@ The message "Database configured and application running successfull" will appea
 
 ## Deployment
 
+I will use MongoDB Atlas, a cloud database service for MongoDB to host the database. </br>
+Steps to setup MongoDB Atlas in the project:
+1. Register for Atlas account, deploy a free tier cluster, set up a user, and an IP address.
+2. 
 For deploying the application, I will use <mark> Heroku </mark> as the hosting platform and <mark> MongoDB Atlas </mark> for the database service.
 
 Heroku provides a seamless and scalable environment for deploying applications with built-in support for integration and easy scaling.
