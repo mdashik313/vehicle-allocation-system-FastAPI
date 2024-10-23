@@ -47,7 +47,7 @@ Steps to setup MongoDB Atlas in the project:
 
 ### Heroku
 For deploying the application, I will use <mark> Heroku </mark> as the hosting platform.
-Steps to setup MongoDB Atlas in the project:
+Steps to setup Heroku in the project:
 1. Sign up for a Heroku account and install the Heroku CLI.
 2. Add a Procfile to project's root
 ```
