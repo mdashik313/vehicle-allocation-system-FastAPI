@@ -34,7 +34,7 @@ pip install -r requirements.txt
 ```
 uvicorn main:app --reload
 ```
-The message "Database configured" & "Application startup complete." will appear if everything is right. Now by going to "http://localhost:8000/docs" you will be able to see the FastAPI provided wagger documentation of the API. 
+The message "Database configured" & "Application startup complete." will appear if everything is right. Now by going to "http://localhost:8000/docs" you will be able to see the FastAPI provided swagger documentation of the API. 
 
 ## Deployment
 ### MongoDB Atlas
