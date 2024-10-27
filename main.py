@@ -9,7 +9,7 @@ app = FastAPI()
 async def startup_event():
     try:
         await create_indexes()  # creates indexes on the collections
-        print("Database configured and application running successfull")
+        print("Database configured")
     except Exception as e:
         print(f"Error during startup: {e}")
 
