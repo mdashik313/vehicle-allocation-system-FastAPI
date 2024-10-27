@@ -73,9 +73,8 @@ async def filter_allocation(search_params: dict) -> list:
                 return [] 
         
     results = allocation_history.find({  #querying by multiple attributes
-        "$and": [
-         search_params
-    ]})
+        "$and": [search_params]
+    })
     
     allocation_list = []
     # Iterating over the result to retrieve documents

@@ -22,8 +22,8 @@ class AllocationSchema(BaseModel):  #model to mapping the database
         # If validation passes, return the original value
         return value
 
-    class Config:
-        json_schema_extra = {
+    class Config:  #JSON example that will display in API documentation
+        json_schema_extra = { 
             "example": {
                 "employee_id": 1,
                 "employee_name": "Ashik",

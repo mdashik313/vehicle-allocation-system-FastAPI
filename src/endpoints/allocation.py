@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 
 
 
-router = APIRouter(prefix="/allocation",
+router = APIRouter(prefix="/allocation", # APIRouter is a class used to structure and manage the paths/endpoints
     tags=["Vehicle Allocation System"])
 
 
@@ -19,8 +19,8 @@ async def create_allocation(allocation: AllocationSchema = Body(...)):
 
     
     # Check if the vehicle is already allocated for the given date
-    existing_allocation = await allocation_history.find_one({
-        "vehicle_id": allocation.vehicle_id,
+    existing_allocation = await allocation_history.find_one({   #await allows other parts of the application to continue while waiting for the result from asynchronous function find_one.
+        "vehicle_id": allocation.vehicle_id,                    
         "allocation_date": allocation.allocation_date
     })
     
