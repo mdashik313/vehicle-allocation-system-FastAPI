@@ -1,7 +1,6 @@
 from src.database import allocation_history, allocationDB_helper
 from bson.objectid import ObjectId
 from datetime import date, datetime
-from motor.motor_asyncio import AsyncIOMotorCollection
 
 
 #crud operations

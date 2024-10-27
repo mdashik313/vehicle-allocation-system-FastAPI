@@ -1,4 +1,4 @@
-import motor.motor_asyncio
+import motor.motor_asyncio  #motor is asynchronous python driver for MongoDB
 
 
 MONGO_DETAILS = "mongodb://localhost:27017"
